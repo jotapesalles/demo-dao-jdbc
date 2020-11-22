@@ -15,6 +15,9 @@ public class Seller implements Serializable {
 	private Double baseSalary;
 	private Department department;
 	
+	public Seller() {
+		
+	}
 	
 	public Seller(Integer id, String name, String email, String birthDate, Double baseSalary, Department department) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
