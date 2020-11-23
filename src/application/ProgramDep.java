@@ -1,5 +1,6 @@
 package application;
 
+import java.util.List;
 import java.util.Scanner;
 
 import dao.DAOFactory;
@@ -24,8 +25,14 @@ public class ProgramDep {
 		departmentDAO.deleteById(9);
 		
 		System.out.println("====== Test 4: findById =====");
-		dep = departmentDAO.findById(sc.nextInt());
+		dep = departmentDAO.findById(4);
 		System.out.println(dep);
+		
+		System.out.println("====== Test 5: findAll =====");
+		List<Department> list = departmentDAO.findAll();
+		for(Department d : list)
+			System.out.println(d);
+		
 		sc.close();
 	}
 
