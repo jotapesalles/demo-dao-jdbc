@@ -20,9 +20,12 @@ public class ProgramDep {
 		dep.setName("Human Resources");
 		departmentDAO.update(dep);
 		
-		System.out.println("====== Test 3: update =====");
-		departmentDAO.deleteById(sc.nextInt());
+		System.out.println("====== Test 3: delete =====");
+		departmentDAO.deleteById(9);
 		
+		System.out.println("====== Test 4: findById =====");
+		dep = departmentDAO.findById(sc.nextInt());
+		System.out.println(dep);
 		sc.close();
 	}
 

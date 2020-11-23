@@ -9,6 +9,7 @@ import java.util.List;
 
 import dao.DepartmentDAO;
 import db.DB;
+import db.DbException;
 import entities.Department;
 import entities.Seller;
 
@@ -32,7 +33,7 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 
 	private Department instantiateDepartment(ResultSet rs) throws SQLException{
 		Department dep = new 
-		Department(rs.getInt("DepartmentId"),rs.getString("DepName"));
+		Department(rs.getInt("Id"),rs.getString("Name"));
 		return dep;
 	}
 
@@ -104,7 +105,29 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 
 	@Override
 	public Department findById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM department WHERE Id = ?");
+			st.setInt(1, id);
+			
+			rs = st.executeQuery();
+			if(rs.next()) {
+				Department dep = instantiateDepartment(rs);
+				return dep;
+			}
+			else {
+				throw new DbException("Department not found.");
+			}
+		}
+		
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 		return null;
 	}
 
