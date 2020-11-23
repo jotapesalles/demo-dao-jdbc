@@ -69,6 +69,10 @@ public class Seller implements Serializable {
 	public Date getBirthDate() {
 		return birthDate;
 	}
+	
+	public java.sql.Date getSQLBirthDate(){
+		return new java.sql.Date(birthDate.getTime());
+	}
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;

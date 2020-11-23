@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import dao.SellerDAO;
 import db.DB;
+import db.DbException;
 import entities.Department;
 import entities.Seller;
 
@@ -23,8 +25,37 @@ public class SellerDAOJDBC implements SellerDAO {
 	
 	@Override
 	public void insert(Seller d) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO seller "
+					+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+					+ "VALUES (?,?,?,?,?)",
+					Statement.RETURN_GENERATED_KEYS);
+			st.setString(1,d.getName());
+			st.setString(2, d.getEmail());
+			st.setDate(3, d.getSQLBirthDate());
+			st.setDouble(4, d.getBaseSalary());
+			st.setInt(5, d.getDepartment().getId());
+			int rowsAffected = st.executeUpdate();
+			if(rowsAffected > 0) {
+				rs = st.getGeneratedKeys();
+				while(rs.next()) {
+					d.setId(rs.getInt(1));
+				}
+			}
+			else {
+				throw new DbException("Nothing happens! ");
+			}
+			
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
