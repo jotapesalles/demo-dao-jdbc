@@ -38,6 +38,7 @@ public class SellerDAOJDBC implements SellerDAO {
 			st.setDouble(4, d.getBaseSalary());
 			st.setInt(5, d.getDepartment().getId());
 			int rowsAffected = st.executeUpdate();
+			System.out.println("Done! Rows Affected: "+ rowsAffected);
 			if(rowsAffected > 0) {
 				rs = st.getGeneratedKeys();
 				while(rs.next()) {
@@ -60,14 +61,48 @@ public class SellerDAOJDBC implements SellerDAO {
 
 	@Override
 	public void update(Seller d) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("UPDATE seller "
+					+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
+					+ "WHERE Id = ?");
+			st.setString(1,d.getName());
+			st.setString(2, d.getEmail());
+			st.setDate(3, d.getSQLBirthDate());
+			st.setDouble(4, d.getBaseSalary());
+			st.setInt(5, d.getDepartment().getId());
+			st.setInt(6, d.getId());
+			int rowsAffected = st.executeUpdate();
+			System.out.println("Done! Rows Affected: "+ rowsAffected);
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ? ");
+			st.setInt(1, id);
+			int rowsAffected = st.executeUpdate();
+			System.out.println("Done! Rows Affected: "+ rowsAffected);
+			st.execute("ALTER TABLE seller AUTO_INCREMENT = 1");
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
