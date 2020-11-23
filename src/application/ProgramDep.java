@@ -12,6 +12,9 @@ public class ProgramDep {
 		System.out.println("====== Test 1: insert =====");
 		departmentDAO.insert(dep);
 		
+		System.out.println("====== Test 2: update =====");
+		dep.setName("Human Resources");
+		departmentDAO.update(dep);
 
 	}
 
