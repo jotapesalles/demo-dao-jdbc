@@ -63,7 +63,6 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 	@Override
 	public void update(Department d) {
 		PreparedStatement st = null;
-		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement("UPDATE department "
 					+ "SET Name = ? "
@@ -81,14 +80,26 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 		}
 		finally {
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
 		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM department "
+					+ "WHERE Id = ?");
+			st.setInt(1, id);
+			int rowsAffected = st.executeUpdate();
+			st.execute("ALTER TABLE department AUTO_INCREMENT = 1");
+			System.out.println("Done! Rows Affected: "+ rowsAffected);
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
