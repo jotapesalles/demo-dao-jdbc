@@ -1,9 +1,13 @@
 package dao.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.DepartmentDAO;
+import db.DB;
 import entities.Department;
 
 public class DepartmentDAOJDBC implements DepartmentDAO {
@@ -15,8 +19,22 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 
 	@Override
 	public void insert(Department d) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO department"
+					+ "(Name) VALUES (?)");
+			st.setString(1, d.getName());
+			int rowsAffected = st.executeUpdate();
+			System.out.println("Done! Rows Affected: "+ rowsAffected);
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
